@@ -15,4 +15,17 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <Button
+        android:layout_width="300px"
+        android:layout_height="300px"
+        android:text="press me"
+        android:id="@+id/pressButton" />
+
+
+    <ImageView
+        android:layout_width="300px"
+        android:layout_height="300px"
+        android:id="@+id/imageView"/>
+
 </android.support.constraint.ConstraintLayout>
