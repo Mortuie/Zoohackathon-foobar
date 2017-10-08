@@ -10,8 +10,30 @@ export default class App extends React.Component {
 		this.state = {
 			data: null,
 			files: null,
+			showUpload: true,
 		};
 	}
+
+	turnOffUpload = () => {
+		this.setState({showUpload: false});
+	}
+
+	turnOnUpload = () => {
+		this.setState({showUpload: true});
+	}
+
+	contents = {
+		0: {
+			title: 'View Images',
+			onClick: this.turnOffUpload,
+
+		},
+		1: {
+			title: 'Upload Image',
+			onClick: this.turnOnUpload,
+		},
+	};
+
 
 	sendPostRequest(file) {
 
@@ -43,12 +65,12 @@ export default class App extends React.Component {
 			console.log(this.state.files);
 			this.sendPostRequest(this.state.files);
 		} console.log(this.state.data);
-
+		console.log(this.state.showUpload);
 
 
 		return (
 			<div className={css(styles.background)}>
-				<NavBar />
+				<NavBar contents={this.contents} turnOff={this.turnOffUpload} turnOn={this.turnOnUpload} />
 				<FileBase64 onDone={this.getFiles.bind(this)} />
 			</div>
 		);
