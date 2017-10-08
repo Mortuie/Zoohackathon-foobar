@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, css} from 'aphrodite';
 import FileBase64 from 'react-file-base64';
 import NavBar from './NavBar';
+import Parser from 'html-react-parser';
 
 export default class App extends React.Component {
 
@@ -10,7 +11,9 @@ export default class App extends React.Component {
 		this.state = {
 			data: null,
 			files: null,
-			showUpload: true,
+			showUpload: false,
+			wholeJSONStorage: null,
+			interval: null,
 		};
 	}
 
@@ -33,6 +36,26 @@ export default class App extends React.Component {
 			onClick: this.turnOnUpload,
 		},
 	};
+
+	componentWillUnmount() {
+		clearInterval(this.state.interval);
+	}
+
+	componentWillMount() {
+		// get request....
+
+		// var interv = setInterval;
+		// this.setState({}); // every 10 or so seconds...
+		// call getResponse populating state...
+	}
+
+
+	getResponse(URL) {
+		var xmlHttp = new XMLHttpRequest();
+    	xmlHttp.open("GET", URL, false); // false for synchronous request
+    	xmlHttp.send(null);
+    	return xmlHttp.responseText;
+	}
 
 
 	sendPostRequest(file) {
@@ -63,13 +86,45 @@ export default class App extends React.Component {
 
 		if (this.state.showUpload) {
 			return (
-				<div>
+				<div className={css(styles.background)}>
+					<NavBar contents={this.contents} turnOff={this.turnOffUpload} turnOn={this.turnOnUpload} />
 					<div className={css(styles.text)}>Upload a picture that you would like translated and highlighted!</div>
 					<FileBase64 onDone={this.getFiles.bind(this)} />
 				</div>
+				
 			);
-		} else {
-			return <div>HI</div>
+		} else { // show all the pictures...
+			// convert base64 to picture
+			// add html to the bottom of the picture...
+			/*
+			var element = new Image();
+			element.src = ELEMENT STRING;
+
+			{Parser(HTML)} -> OUTPUT
+
+			*/
+
+			
+
+			return (
+				<div className={css(styles.backgroundBox)}>
+					<NavBar contents={this.contents} turnOff={this.turnOffUpload} turnOn={this.turnOnUpload} />
+
+					
+					<div className={css(styles.box)}></div>
+					<div className={css(styles.box)}></div>
+					<div className={css(styles.box)}></div>
+					<div className={css(styles.box)}></div>
+					<div className={css(styles.box)}></div>
+					<div className={css(styles.box)}></div>
+					<div className={css(styles.box)}></div>
+					<div className={css(styles.box)}></div>
+					<div className={css(styles.box)}></div>
+
+
+				</div>			
+			);
+
 		}
 	}
 
@@ -82,12 +137,7 @@ export default class App extends React.Component {
 		console.log(this.state.showUpload);
 
 
-		return (
-			<div className={css(styles.background)}>
-				<NavBar contents={this.contents} turnOff={this.turnOffUpload} turnOn={this.turnOnUpload} />
-				{this.renderBackground()}
-			</div>
-		);
+		return this.renderBackground();
 	}
 }
 
@@ -101,6 +151,17 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	backgroundBox: {
+		backgroundColor: '#ea2323',
+		width: '100%',
+		height: '100vh',
+		display: 'flex',
+		overflow: 'scroll',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+		paddingTop: '150px',
 
 	},
 	nav: {
@@ -109,8 +170,14 @@ const styles = StyleSheet.create({
 	},
 	text: {
 		padding: '10px',
-		width: '100px',
-	}
+		margin: '30px',
+	},
+	box: {
+		minWidth: '200px',
+		minHeight: '250px',
+		backgroundColor: 'blue',
+		margin: '15px',
+	},
 });
   
 
