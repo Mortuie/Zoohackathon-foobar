@@ -3,6 +3,7 @@ import './App.css';
 import testpic from './media/testpic.jpg';
 import Dropzone from 'react-dropzone';
 
+import FileBase64 from 'react-file-base64';
 
 export default class App extends React.Component {
 
@@ -10,99 +11,46 @@ export default class App extends React.Component {
 		super();
 		this.state = {
 			data: null,
+			files: null,
 		};
 	}
 
+	sendPostRequest(file) {
 
-	getBase64 = () => {
-		var res;
+		var xhr = new XMLHttpRequest();
+		// console.log(file.base64);
+		var data = "img=" + file.base64;
 
+		xhr.addEventListener("readystatechange", function() {
+			if (this.readyState === 4) {
+				console.log(this.responseText);
+			}
+		});
 
-			var xhr = new XMLHttpRequest();       
-	    	xhr.open("GET", testpic, true); 
-	    	xhr.responseType = "blob";
-	    	xhr.onload = function (e) {
+		xhr.open("POST", "http://35.195.201.85/decode_test.php");
+		xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
 
-	            var reader = new FileReader();
-	            reader.onload = function(event) {
-	               	res = event.target.result;
-	               	this.sendPostRequest(res);
-	            }
-	            var file = this.response;
-	            reader.readAsDataURL(file)
-	    	};
-	    	xhr.send();
-    	
-	}
-
-	sendPostRequest(d) {
-		console.log("BANTER");
-		var http = new XMLHttpRequest();
-		var url = "http://35.195.201.85/decode_test.php";
-		var params = "img" + d;
-		http.open("POST", url, true);
-
-		//Send the proper header information along with the request
-		http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-		http.onreadystatechange = function() {//Call a function when the state changes.
-		    if(http.readyState === 4 && http.status === 200) {
-		        alert(http.responseText);
-		    }
-		}
-		http.send(params);
-	}
-
-	componentWillMount() {
-		//var res = this.getBase64();
-		//this.setState({data: res});
-		// console.log(this.getBase642(testpic));
-	}
-
-	getKey = () => {
-		this.getBase64();
-	}
-
-	
-	onDrop(files) {
-		if ( files.length === 0 ) {
-        alert("upload img please")
-        return;
-    }
-    var blobURL = files[0].preview
-    var reader = new FileReader();
-    reader.readAsDataURL(blobURL)
-
+		xhr.send(data);
 
 	}
 
 
-	getBase642 = (file) => {
-   		var reader = new FileReader();
-   		reader.readAsDataURL(file);
-   		reader.onload = function () {
-     		return reader.result;
-   		};
-   		reader.onerror = function (error) {
-     		return 'Error: ' + error;
-   		};
+	getFiles(file) {
+		this.setState({files: file});
 	}
-
 
 	render() {
 
-		if (this.state.data) {
-			this.sendPostRequest();
+		if (this.state.files) {
+			console.log(this.state.files);
+			this.sendPostRequest(this.state.files);
 		} console.log(this.state.data);
 
 
 
 		return (
 			<div className="App">
-				<button onClick={this.getKey}>Generate Key</button>
-				<button onClick={this.sendPostRequest}>HIT ME</button>
-
-				<Dropzone onClick={this.onDrop}>Drop your files here</Dropzone>
+				<FileBase64 onDone={this.getFiles.bind(this)} />
 			</div>
 		);
 	}
