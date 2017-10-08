@@ -1,9 +1,7 @@
 import React from 'react';
-import './App.css';
-import testpic from './media/testpic.jpg';
-import Dropzone from 'react-dropzone';
-
+import {StyleSheet, css} from 'aphrodite';
 import FileBase64 from 'react-file-base64';
+import NavBar from './NavBar';
 
 export default class App extends React.Component {
 
@@ -49,7 +47,8 @@ export default class App extends React.Component {
 
 
 		return (
-			<div className="App">
+			<div className={css(styles.background)}>
+				<NavBar />
 				<FileBase64 onDone={this.getFiles.bind(this)} />
 			</div>
 		);
@@ -57,6 +56,12 @@ export default class App extends React.Component {
 }
 
 
-
+const styles = StyleSheet.create({
+	background: {
+		backgroundColor: '#ea2323',
+		width: '100%',
+		height: '100vh',
+	}
+});
   
 
