@@ -11,7 +11,7 @@ export default class App extends React.Component {
 		this.state = {
 			data: null,
 			files: null,
-			showUpload: false,
+			showUpload: true,
 			wholeJSONStorage: null,
 			interval: null,
 		};
@@ -42,17 +42,28 @@ export default class App extends React.Component {
 	}
 
 	componentWillMount() {
-		// get request....
+		// // get request....
 
 		// var interv = setInterval;
 		// this.setState({}); // every 10 or so seconds...
-		// call getResponse populating state...
+		// // call getResponse populating state...
+
+		// var interval = setInterval(function() {
+		// 	var responses = this.getResponse();
+
+		// 	this.setState({wholeJSONStorage: responses});
+
+		// }, 2000);
+		// this.setState({interval: interval});
+
+
+		
 	}
 
 
 	getResponse(URL) {
 		var xmlHttp = new XMLHttpRequest();
-    	xmlHttp.open("GET", URL, false); // false for synchronous request
+    	xmlHttp.open("GET", "35.195.201.85/get_translation.php", false); // false for synchronous request
     	xmlHttp.send(null);
     	return xmlHttp.responseText;
 	}
@@ -61,8 +72,8 @@ export default class App extends React.Component {
 	sendPostRequest(file) {
 
 		var xhr = new XMLHttpRequest();
-		// console.log(file.base64);
-		var data = "img=" + file.base64;
+		console.log(file.name);
+		var data = "img=" + file.base64 + "&name=" + file.name;
 
 		xhr.addEventListener("readystatechange", function() {
 			if (this.readyState === 4) {
@@ -70,7 +81,7 @@ export default class App extends React.Component {
 			}
 		});
 
-		xhr.open("POST", "http://35.195.201.85/decode_test.php");
+		xhr.open("POST", "http://35.195.201.85/translation/decode_test.php");
 		xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
 
 		xhr.send(data);
@@ -103,7 +114,7 @@ export default class App extends React.Component {
 			{Parser(HTML)} -> OUTPUT
 
 			*/
-
+			console.log(this.state.wholeJSONStorage);
 			
 
 			return (
@@ -111,15 +122,9 @@ export default class App extends React.Component {
 					<NavBar contents={this.contents} turnOff={this.turnOffUpload} turnOn={this.turnOnUpload} />
 
 					
-					<div className={css(styles.box)}></div>
-					<div className={css(styles.box)}></div>
-					<div className={css(styles.box)}></div>
-					<div className={css(styles.box)}></div>
-					<div className={css(styles.box)}></div>
-					<div className={css(styles.box)}></div>
-					<div className={css(styles.box)}></div>
-					<div className={css(styles.box)}></div>
-					<div className={css(styles.box)}></div>
+					<div className={css(styles.box)}>
+
+
 
 
 				</div>			
@@ -177,6 +182,8 @@ const styles = StyleSheet.create({
 		minHeight: '250px',
 		backgroundColor: 'blue',
 		margin: '15px',
+		color: 'black',
+		padding: '10px',
 	},
 });
   
